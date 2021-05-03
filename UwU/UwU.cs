@@ -1,7 +1,9 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Reactor;
+using UwU.Patches;
 
 namespace UwU
 {
@@ -13,12 +15,19 @@ namespace UwU
     {
         public const string Id = "daemon.uwu";
         public const string Name = "UwU";
-        public const string Version = "0.1.0";
+        public const string Version = "1.0.0";
 
         public Harmony Harmony { get; } = new Harmony(Id);
 
+        public static ConfigEntry<bool> IsEnabled;
+
         public override void Load()
         {
+            IsEnabled = Config.Bind("Preferences", "Enabled", true, "Whether Among Us should be UwUified.");
+            
+            SpritePatches.Patch();
+            InterfacePatches.Patch();
+            
             Harmony.PatchAll();
         }
     }

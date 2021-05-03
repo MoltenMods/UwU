@@ -2,9 +2,9 @@
 
 An Among Us mod to make Among Us UwU.
 
-![How to play page](images/HowToPlayPage.png)
-![How to play page 2](images/HowToPlayPage2.png)
-![Local help popup](images/LocalHelpPopup.png)
+![Loading screen](images/Loading.png)
+![How to play as impostor](images/HowToPlayImpostor.png)
+![Task Tester](images/TaskTester.png)
 
 # Table of Contents
 - [Hall Of Fame](#hall-of-fame)
