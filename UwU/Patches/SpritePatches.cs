@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Reactor;
 using Reactor.Extensions;
+using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,8 +10,8 @@ namespace UwU.Patches
 {
     public static class SpritePatches
     {
-        private static AssetBundle _bundle;
-        private static Dictionary<string, Sprite> _replacementSprites;
+        private static UnityEngine.Object[] _assets;
+        private static readonly Dictionary<string, Sprite> ReplacementSprites = new Dictionary<string, Sprite>();
         private static Dictionary<string, Vector2> _transformations;
 
         public static void Patch()
@@ -21,39 +23,76 @@ namespace UwU.Patches
         {
             if (!UwUPlugin.IsEnabled.Value) return;
             
-            if (!_bundle)
+            Logger<UwUPlugin>.Info("Scene reloaded - replacing sprites");
+
+            if (_assets is null)
             {
-                _bundle = AssetBundle.LoadFromMemory(typeof(UwUPlugin).Assembly
+                Logger<UwUPlugin>.Info("Loading assets");
+                
+                var bundle = AssetBundle.LoadFromMemory(typeof(UwUPlugin).Assembly
                     .GetManifestResourceStream("UwU.Assets.uwu").ReadFully());
 
-                var amongUwUSprite = _bundle.LoadAsset<Sprite>("AmongUwU").DontUnload();
+                _assets = bundle.LoadAllAssets(Il2CppType.Of<Sprite>());
+                
+                bundle.Unload(false);
 
-                _replacementSprites = new Dictionary<string, Sprite>()
+                Logger<UwUPlugin>.Info($"Loaded {_assets.Length} assets");
+
+                var replacementSpriteNames = new Dictionary<string, string[]>
                 {
-                    { "AmongUsLogo", amongUwUSprite },
-                    { "bannerLogo_AmongUs", amongUwUSprite }
+                    { "AmongUwU", new[] { "AmongUsLogo", "bannerLogo_AmongUs" } },
+                    { "local", new[] { "PlayLocalButton" } },
+                    { "online", new[] { "PlayOnlineButton" } },
+                    { "htp", new [] { "HowToPlayButton" } },
+                    { "freeplay", new [] { "FreePlayButton" } }
                 };
 
-                _transformations = new Dictionary<string, Vector2>()
+                foreach (var asset in _assets)
+                {
+                    if (!replacementSpriteNames.TryGetValue(asset.name, out var spritesToReplace)) continue;
+                    
+                    foreach (var spriteToReplace in spritesToReplace)
+                    {
+                        asset.DontUnload();
+                        
+                        ReplacementSprites[spriteToReplace] = asset.TryCast<Sprite>();
+                    }
+                }
+
+                _transformations = new Dictionary<string, Vector2>
                 {
                     { "AmongUsLogo", new Vector2(-0.25f, 0) }
                 };
-
-                _bundle.Unload(false);
+                
+                Logger<UwUPlugin>.Info("Mapped assets");
             }
-            
-            foreach (var (originalName, replacementSprite) in _replacementSprites)
+
+            var successfulReplacements = 0;
+            foreach (var (originalName, replacementSprite) in ReplacementSprites)
             {
                 var original = GameObject.Find(originalName);
-                if (!original) return;
+                if (original is null)
+                {
+                    Logger<UwUPlugin>.Warning($"Failed to find object `{originalName}`");
+                    continue;
+                }
                 
+                if (replacementSprite is null) Logger<UwUPlugin>.Warning("sprite is null");
+
+                original.GetComponent<ImageTranslator>()?.Destroy();
                 original.GetComponent<SpriteRenderer>().sprite = replacementSprite;
+                
+                Logger<UwUPlugin>.Debug($"Replaced sprite of object `{originalName}`");
+                successfulReplacements++;
 
                 if (_transformations.TryGetValue(originalName, out var translation))
                 {
                     original.transform.Translate(translation);
                 }
             }
+
+            Logger<UwUPlugin>.Info(
+                $"Successfully replaced {successfulReplacements}/{ReplacementSprites.Count} sprites");
         }
     }
 }

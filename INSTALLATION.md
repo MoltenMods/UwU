@@ -12,8 +12,28 @@ library then selecting `Manage > Browse local files`.
 
 ## Installing BepInEx
 
-1. Download the latest release from the NuclearPowered/BepInEx
-   [releases](https://github.com/NuclearPowered/BepInEx/releases) page.
+<table>
+    <thead>
+        <tr>
+            <td>UwU Version</td>
+            <td>BepInEx version</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2.0.0-pre.1</td>
+            <td rowspan="3"><a href="https://github.com/NuclearPowered/BepInEx/releases/tag/6.0.0-reactor.18%2Bstructfix">6.0.0-reactor.18+structfix</a></td>
+        </tr>
+        <tr>
+            <td>1.0.0</td>
+        </tr>
+        <tr>
+            <td>0.1.0</td>
+        </tr>
+    </tbody>
+</table>
+
+1. Download the appropriate release from the above table.
 2. Unzip the files into the Among Us game files directory. It should 
    look something like this after you add BepInEx:
    
@@ -64,14 +84,32 @@ library then selecting `Manage > Browse local files`.
    
 ## Installing Reactor
 
-1. Go to the
-   [Reactor CI](https://github.com/NuclearPowered/Reactor/actions)
-   page.
-2. Click on the top workflow run.
-3. Download the `Reactor.dll` artifact.
-4. Move the `Reactor.dll` file to the
+<table>
+    <thead>
+        <tr>
+            <td>UwU Version</td>
+            <td>Reactor version</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2.0.0-pre.1</td>
+            <td><a href="https://github.com/DaemonBeast/Reactor/releases/tag/2021.5.10s">Reactor-2021.5.10s</a></td>
+        </tr>
+        <tr>
+            <td>1.0.0</td>
+            <td rowspan="2"><a href="https://github.com/NuclearPowered/Reactor/actions/runs/827746360">Reactor-2021.4.14s</a></td>
+        </tr>
+        <tr>
+            <td>0.1.0</td>
+        </tr>
+    </tbody>
+</table>
+
+1. Download Reactor from the appropriate page in the above table.
+2. Move the `Reactor.dll` file to the
    `(Among Us game files)/BepInEx/plugins` folder.
-5. Launch the game. The top left of the game menu should look
+3. Launch the game. The top left of the game menu should look
    something like this:
    
 ![Mod text](images/ModText.jpg)

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using HarmonyLib;
 using UnhollowerBaseLib;
 
@@ -46,10 +47,13 @@ namespace UwU.Patches
         public static string Convert(string original)
         {
             if (!UwUPlugin.IsEnabled.Value) return original;
-            
+
+            if (UwUPlugin.Lowercase.Value) original = original.ToLower();
+
+            original = Regex.Replace(original, @"uwu", "UwU");
+
             original = Regex.Replace(original, @"(?:r|l)", "w");
-            original = Regex.Replace(original, @"(?:R|L)", "W");
-            
+
             original = Regex.Replace(original, @"n([aeiou])", "ny$1");
             original = Regex.Replace(original, @"N([aeiou])", "Ny$1");
             original = Regex.Replace(original, @"N([AEIOU])", "Ny$1");
