@@ -1,3 +1,5 @@
+> This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.
+
 > **⚠ WARNING**
 >
 > The latest release (2.0.0-pre.1) is currently slightly broken. I
